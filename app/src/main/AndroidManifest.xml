@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="hackucsc.darling_christner_holtsman.studentsurvivalkit"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="hackucsc.darling_christner_holtsman.studentsurvivalkit">
 
     <application
         android:allowBackup="true"
@@ -10,17 +10,15 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Home">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Calendar">
-        </activity>
-        <activity android:name=".GradeTracker">
-        </activity>
-        <activity android:name=".GradeProject">
-        </activity>
+        <activity android:name=".Calendar"></activity>
+        <activity android:name=".GradeTracker"></activity>
+        <activity android:name=".GradeProject"></activity>
+        <activity android:name=".Registration_activity"></activity>
     </application>
 
 </manifest>

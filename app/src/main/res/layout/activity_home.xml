@@ -28,4 +28,31 @@
         android:layout_below="@id/calendarButton"
 
         android:onClick="gradeTrack"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registerEdit"
+        android:layout_above="@+id/calendarButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="53dp"
+        android:hint="Enter Username Here"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/register"
+        android:id="@+id/registerView"
+        android:layout_above="@+id/registerEdit"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="register"
+        android:id="@+id/registerButton"
+        android:layout_above="@+id/calendarButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="register"/>
 </RelativeLayout>
