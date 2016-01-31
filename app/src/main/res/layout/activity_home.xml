@@ -26,6 +26,16 @@
         android:text="Calculator"
         android:id="@+id/calcButton"
         android:layout_below="@id/calendarButton"
-
         android:onClick="gradeTrack"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/registerButton"
+        android:layout_above="@+id/calendarButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="51dp"
+        android:onClick="registerClass"/>
+
 </RelativeLayout>
