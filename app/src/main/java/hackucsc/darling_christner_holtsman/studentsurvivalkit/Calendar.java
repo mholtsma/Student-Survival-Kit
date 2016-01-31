@@ -35,24 +35,27 @@ public class Calendar extends AppCompatActivity {
     int month;
     int day;
     boolean isEven;
-
+    int blue = -16776961;
     public void setup() {
         final CalendarView cv = (CalendarView) findViewById(R.id.calendarView);
         cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int grabyear, int grabmonth, int dayOfMonth) {
                 if(dayOfMonth%2 == 0){
-                   cv.setSelectedWeekBackgroundColor(-16776961);
+                   cv.setSelectedWeekBackgroundColor(blue);
                 }else{
                     cv.setSelectedWeekBackgroundColor(-65536);
                 }
-
-                String day = Cal_Proccess.getDay(cv, view);
+                String day = Cal_Proccess.getDay(cv);
                 TextView tx = (TextView) findViewById(R.id.test);
+                TextView tx2 = (TextView) findViewById(R.id.test2);
                 tx.setText(day);
-                //year = grabyear;
-               // month = grabmonth;
-                //day = dayOfMonth;
+                if(Cal_Proccess.classDay(cv, "MWF")){
+                    tx2.setText("You have class");
+                }else{
+                    tx2.setText("No class today!");
+                }
+
             }
         });
 
