@@ -1,26 +1,28 @@
 package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import java.util.Calendar;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import java.util.Date;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.w3c.dom.Text;
-
 public class Calendar extends AppCompatActivity {
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
+    int year;
+    int month;
+    int day;
+    boolean isEven;
+    static final public String MYPREFS = "myprefs";
+    long startDate, endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +33,44 @@ public class Calendar extends AppCompatActivity {
 
     }
 
-    int year;
-    int month;
-    int day;
-    boolean isEven;
-    int blue = -16776961;
+    Date date;
+
+    public void date_Get(int Day, int Month, int Year){
+
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.set(Year, Month, Day);
+        date = cal.getTime();
+    }
+
+    public void imp(){
+        SharedPreferences settings = getSharedPreferences(MYPREFS, 0);
+        int startDate = settings.getInt("startDay",1);
+        int startYear = settings.getInt("startYear",1);
+        int startMonth = settings.getInt("startMonth",1);
+        Date startDay= Cal_Proccess.date_Get(startDate, startMonth, startYear);
+
+        int endDate = settings.getInt("endDay", 1);
+        int endYear = settings.getInt("endYear", 1);
+        int endMonth = settings.getInt("endMonth",1);
+        Date endDay= Cal_Proccess.date_Get(startDate,startMonth,startYear);
+    }
+
+
     public void setup() {
         final CalendarView cv = (CalendarView) findViewById(R.id.calendarView);
+        final long currentDate = cv.getDate();
         cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int grabyear, int grabmonth, int dayOfMonth) {
-                if(dayOfMonth%2 == 0){
-                   cv.setSelectedWeekBackgroundColor(blue);
-                }else{
-                    cv.setSelectedWeekBackgroundColor(-65536);
+                if(cv.getDate() < currentDate) {
+                    //if its in the past
+                    if (dayOfMonth % 2 == 0) {
+                        cv.setSelectedWeekBackgroundColor(getResources().getColor(R.color.bpBlue));
+                    } else {
+                        cv.setSelectedWeekBackgroundColor(getResources().getColor(R.color.bpDarker_red));
+                    }
+                }else if (cv.getDate() >= currentDate){
+                    cv.setSelectedWeekBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 }
                 String day = Cal_Proccess.getDay(cv);
                 TextView tx = (TextView) findViewById(R.id.test);
@@ -60,4 +86,9 @@ public class Calendar extends AppCompatActivity {
         });
 
     }
+
+
+
+
+
 }
