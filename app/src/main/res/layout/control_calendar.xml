@@ -22,7 +22,7 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/next_icon"/>
+            android:src="@drawable/previous_icon"/>
 
         <!-- date title -->
         <TextView

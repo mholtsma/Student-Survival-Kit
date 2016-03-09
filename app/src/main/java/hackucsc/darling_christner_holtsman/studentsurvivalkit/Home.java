@@ -26,9 +26,11 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
     }
 
+    /*Buttons*/
+
     public void calPress(View view){
-        Intent intent= new Intent (this, Calendar.class);
-        startActivity(intent);
+        Intent Calintent= new Intent (this, MyCalendar.class);
+        startActivity(Calintent);
     }
 
     public void gradeTrack(View view){
@@ -40,6 +42,9 @@ public class Home extends AppCompatActivity {
         Intent registerIntent = new Intent(this, Registration_activity.class);
         startActivity(registerIntent);
     }
+
+
+    /*Creates a new notifiction*/
     public void Remind(View v){
         Intent intent = new Intent(this, Reciever_Reminder.class);
         PendingIntent pend = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
