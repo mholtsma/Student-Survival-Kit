@@ -3,7 +3,7 @@ package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 //Should include links the the different features
 //
 //
-//
+// This comment is to test Ian's commit
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.Calendar;
 
 public class Home extends AppCompatActivity {
 
