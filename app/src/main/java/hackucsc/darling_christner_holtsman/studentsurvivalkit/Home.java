@@ -3,7 +3,7 @@ package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 //Should include links the the different features
 //
 //
-// This comment is to test Ian's commit blah
+// This comment is to test Ian's commit 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
