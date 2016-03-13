@@ -22,5 +22,16 @@ public final class ClassReaderContract {
 
     }
 
+    public static abstract class DateEntry implements BaseColumns {
+        public static final String TABLE_NAME = "CLASS_TABLE";
+        public static final String COLUMN_NAME_ENTRY_ID = "entryid";
+        public static final String COLUMN_CLASS = "CLASS";
+        public static final String COLUMN_UNITS = "UNITS";
+        public static final String COLUMN_CLASS_DAYS = "CLASS_DAYS";
+        public static final String COLUMN_START_DATE = "START_DATE";
+        public static final String COLUMN_END_DATE = "END_DATE";
+
+    }
+
 }
 
