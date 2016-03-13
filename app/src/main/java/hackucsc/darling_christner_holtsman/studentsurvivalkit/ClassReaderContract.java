@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 /**
  * Created by march on 3/12/2016.
  */
+
 public final class ClassReaderContract {
     public ClassReaderContract() {}
 

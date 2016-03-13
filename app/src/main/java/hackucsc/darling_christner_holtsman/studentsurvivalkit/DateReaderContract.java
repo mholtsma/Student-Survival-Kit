@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 /**
  * Created by march on 3/13/2016.
  */
+
 public class DateReaderContract {
     public DateReaderContract() {}
 

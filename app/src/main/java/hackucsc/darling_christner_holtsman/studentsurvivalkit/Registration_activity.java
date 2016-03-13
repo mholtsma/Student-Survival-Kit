@@ -148,7 +148,9 @@ public class Registration_activity extends AppCompatActivity{
     }
 
 
-  /*  public void calcClassDays(String startDate,String endDate, String classDays){
+  /*
+
+   public void calcClassDays(String startDate,String endDate, String classDays){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         SharedPreferences settings = getSharedPreferences(MYPREFS, 0);
         EditText classText = (EditText) findViewById(R.id.classText);
