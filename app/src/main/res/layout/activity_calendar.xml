@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="20dp"
-    tools:context="hackucsc.darling_christner_holtsman.studentsurvivalkit.CalendarView">
+    tools:context=".MyCalendar"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +21,8 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context=".MainActivity">
+        tools:context=".MyCalendar"
+        >
 
         <hackucsc.darling_christner_holtsman.studentsurvivalkit.CalendarView
             xmlns:calendarNS="http://schemas.android.com/apk/res/hackucsc.darling_christner_holtsman.studentsurvivalkit"
@@ -30,28 +32,32 @@
             calendarNS:dateFormat="MMMM yyyy"/>
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@+id/calLinear">
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/calLinear">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/test"
+                    android:text="test test"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/selected_Date"
                     android:layout_margin="20dp"
                     android:typeface="serif"
                     android:textSize="15sp"
                     android:textColor="@color/colorPrimaryDarker"
                     android:text="Selected Date"
-                    android:id="@+id/selectedDate"/>
+                    />
 
 
             </LinearLayout>
         </ScrollView>
-    </RelativeLayout>
+
 </RelativeLayout>

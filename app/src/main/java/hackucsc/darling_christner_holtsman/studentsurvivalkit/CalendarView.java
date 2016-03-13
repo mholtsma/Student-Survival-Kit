@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,7 +54,9 @@ public class CalendarView extends LinearLayout
     private ImageView btnNext;
     private TextView txtDate;
     private GridView grid;
-    public TextView selecdate;
+    private TextView select;
+    private TextView selected_date;
+    String selected="";
 
 
     // month-season association (northern hemisphere, sorry australia :)
@@ -109,21 +113,19 @@ public class CalendarView extends LinearLayout
     private void assignUiElements()
     {
         // layout is inflated, assign local variables to components
-        selecdate = (TextView)findViewById(R.id.selectedDate);
+        //selecdate = (TextView)findViewById(R.id.selected_Date);
         btnPrev = (ImageView)findViewById(R.id.calendar_prev_button);
         btnNext = (ImageView)findViewById(R.id.calendar_next_button);
         txtDate = (TextView)findViewById(R.id.calendar_date_display);
         grid = (GridView)findViewById(R.id.calendar_grid);
     }
 
-    private void assignClickHandlers()
-    {
+    private void assignClickHandlers() {
+
         // add one month and refresh UI
-        btnNext.setOnClickListener(new OnClickListener()
-        {
+        btnNext.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 currentDate.add(Calendar.MONTH, 1);
                 //selecdate.setText("bub");
                 updateCalendar();
@@ -131,41 +133,30 @@ public class CalendarView extends LinearLayout
         });
 
         // subtract one month and refresh UI
-        btnPrev.setOnClickListener(new OnClickListener()
-        {
+        btnPrev.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 currentDate.add(Calendar.MONTH, -1);
                 updateCalendar();
             }
         });
 
         // long-pressing a day
-        grid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> view, View cell, int position, long id)
+
+            public void onItemClick(AdapterView<?> view, View cell, int position, long id)
             {
                 // handle long-press
 
-
-                if (eventHandler == null)
-                    return false;
-                SimpleDateFormat sim= new SimpleDateFormat(dateFormat);
-                Date date = (Date) view.getItemAtPosition(position);
-                if(date!= null) {
-                    //txtDate.setText(sim.format(currentDate.getTime()));
-                    //selecdate.setText("bub");
-                }
-                eventHandler.onDayLongPress((Date) view.getItemAtPosition(position));
-                return true;
-
-
+                eventHandler.onDayLongPress((Date)view.getItemAtPosition(position));
 
             }
+
         });
+
     }
 
     /**
