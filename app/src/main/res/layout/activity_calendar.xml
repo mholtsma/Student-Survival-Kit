@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="20dp"
-    tools:context="hackucsc.darling_christner_holtsman.studentsurvivalkit.Calendar">
+    tools:context=".MyCalendar">
 
     <CalendarView
         style="@android:style/Widget.CalendarView"
