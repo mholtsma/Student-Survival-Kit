@@ -19,7 +19,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     ClassReaderContract.ClassEntry.COLUMN_UNITS + TEXT_TYPE + COMMA_SEP +
                     ClassReaderContract.ClassEntry.COLUMN_CLASS_DAYS + TEXT_TYPE + COMMA_SEP + "'" +
                     ClassReaderContract.ClassEntry.COLUMN_START_DATE + "'" + TEXT_TYPE + COMMA_SEP + "'" +
-                    ClassReaderContract.ClassEntry.COLUMN_END_DATE + "'" + TEXT_TYPE +
+                    ClassReaderContract.ClassEntry.COLUMN_END_DATE + "'" + TEXT_TYPE + COMMA_SEP +
+                    ClassReaderContract.ClassEntry.COLUMN_STUDY_HOURS + TEXT_TYPE +
                     " );";
 
     private static final String SQL_DELETE_ENTRIES =

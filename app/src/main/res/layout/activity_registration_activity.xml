@@ -37,92 +37,111 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <!--  <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge"
+         android:text="When are your classes?"
+         android:id="@+id/dateView"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentStart="true"
+         android:layout_below="@+id/unitsText" /> -->
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge"
+         android:text="What Class Are You Taking? "
+         android:id="@+id/textView2"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentStart="true" />
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge"
+         android:text="How Many Units is your Class?"
+         android:id="@+id/textView3"
+         android:layout_below="@+id/classText"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentStart="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="When are your classes?"
-        android:id="@+id/dateView"
+        android:text="How Much do You Plan to Study?"
+        android:id="@+id/textView"
+        android:layout_below="@+id/unitsText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hours"
+        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/unitsText" />
+        android:hint="Hours" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="What Class Are You Taking? "
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <!--    <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Start Date"
+           android:id="@+id/startDateButton"
+           android:layout_below="@+id/dateView"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="How Many Units is your Class?"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/classText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+      <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:id="@+id/startDateView"
+           android:layout_alignBottom="@+id/startDateButton"
+           android:layout_toRightOf="@+id/startDateButton"
+           android:layout_toEndOf="@+id/startDateButton"
+           android:hint="Start Date" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Date"
-        android:id="@+id/startDateButton"
-        android:layout_below="@+id/dateView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+       <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="End Date"
+           android:id="@+id/endDateButton"
+           android:layout_below="@+id/startDateView"
+           android:layout_alignLeft="@+id/classText"
+           android:layout_alignStart="@+id/classText" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/startDateView"
-        android:layout_alignBottom="@+id/startDateButton"
-        android:layout_toRightOf="@+id/startDateButton"
-        android:layout_toEndOf="@+id/startDateButton"
-        android:hint="Start Date" />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:id="@+id/endDateView"
+           android:singleLine="true"
+           android:hint="End Date"
+           android:layout_alignBottom="@+id/endDateButton"
+           android:layout_toRightOf="@+id/endDateButton"
+           android:layout_toEndOf="@+id/endDateButton" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Date"
-        android:id="@+id/endDateButton"
-        android:layout_below="@+id/startDateView"
-        android:layout_alignLeft="@+id/classText"
-        android:layout_alignStart="@+id/classText" />
+       <Spinner
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/daySpinner"
+           android:entries="@array/classDays"
+           android:layout_below="@+id/textView"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/endDateView"
-        android:singleLine="true"
-        android:hint="End Date"
-        android:layout_alignBottom="@+id/endDateButton"
-        android:layout_toRightOf="@+id/endDateButton"
-        android:layout_toEndOf="@+id/endDateButton" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/daySpinner"
-        android:entries="@array/classDays"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/pick_days"
-        android:id="@+id/textView"
-        android:layout_below="@+id/endDateView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:text="@string/pick_days"
+           android:id="@+id/textView"
+           android:layout_below="@+id/endDateView"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true" /> -->
 
 </RelativeLayout>
