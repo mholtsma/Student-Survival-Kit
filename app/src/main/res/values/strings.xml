@@ -11,5 +11,4 @@
         <item>Tuesday, Thursday</item>
         <item>Monday, Wednesday, Friday</item>
     </string-array>
-    <string name="classDays">Class Days</string>
 </resources>

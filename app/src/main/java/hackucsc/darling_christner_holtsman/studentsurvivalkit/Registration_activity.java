@@ -2,6 +2,18 @@ package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import java.util.Calendar;
+
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -95,7 +107,7 @@ public class Registration_activity extends AppCompatActivity implements DatePick
         isEnd = true;
     }
 
-    public void submitCLassInfo(View v){
+    public void submitClassInfo(View v){
         EditText classText = (EditText) findViewById(R.id.classText);
         EditText unitsText = (EditText) findViewById(R.id.unitsText);
         EditText rText = (EditText) findViewById(R.id.registerEdit);

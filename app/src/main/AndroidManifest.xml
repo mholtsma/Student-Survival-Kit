@@ -16,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Calendar">
+        <activity android:name=".CalendarView">
         </activity>
+        <activity android:name=".MyCalendar"></activity>
         <activity android:name=".GradeTracker">
         </activity>
         <activity android:name=".GradeProject">
