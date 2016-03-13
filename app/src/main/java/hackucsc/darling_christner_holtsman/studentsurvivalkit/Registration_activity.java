@@ -111,7 +111,6 @@ public class Registration_activity extends AppCompatActivity implements DatePick
     public void submitClassInfo(View v){
         EditText classText = (EditText) findViewById(R.id.classText);
         EditText unitsText = (EditText) findViewById(R.id.unitsText);
-        EditText rText = (EditText) findViewById(R.id.registerEdit);
         daySpinner = (Spinner) findViewById(R.id.daySpinner);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         SharedPreferences settings = getSharedPreferences(MYPREFS, 0);
