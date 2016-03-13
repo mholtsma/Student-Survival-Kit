@@ -53,16 +53,7 @@ public class CalendarView extends LinearLayout
     private TextView txtDate;
     private GridView grid;
 
-    // seasons' rainbow
-    int[] rainbow = new int[] {
-            R.color.summer,
-            R.color.fall,
-            R.color.winter,
-            R.color.spring
-    };
 
-    // month-season association (northern hemisphere, sorry australia :)
-    int[] monthSeason = new int[] {2, 2, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2};
 
     public CalendarView(Context context)
     {
@@ -125,11 +116,9 @@ public class CalendarView extends LinearLayout
     private void assignClickHandlers()
     {
         // add one month and refresh UI
-        btnNext.setOnClickListener(new OnClickListener()
-        {
+        btnNext.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 currentDate.add(Calendar.MONTH, 1);
                 updateCalendar();
             }
@@ -147,18 +136,14 @@ public class CalendarView extends LinearLayout
         });
 
         // long-pressing a day
-        grid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> view, View cell, int position, long id)
-            {
-                // handle long-press
-                if (eventHandler == null)
-                    return false;
+            public void onItemClick(AdapterView<?> view, View cell, int position, long id) {
+                // handle long-pressdfgdg
 
-                eventHandler.onDayLongPress((Date)view.getItemAtPosition(position));
-                return true;
+                eventHandler.onDayLongPress((Date) view.getItemAtPosition(position));
+
             }
         });
     }
@@ -200,12 +185,8 @@ public class CalendarView extends LinearLayout
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         txtDate.setText(sdf.format(currentDate.getTime()));
 
-        // set header color according to current season
-        int month = currentDate.get(Calendar.MONTH);
-        int season = monthSeason[month];
-        int color = rainbow[season];
 
-        header.setBackgroundColor(getResources().getColor(color));
+        header.setBackgroundColor(getResources().getColor(R.color.spring));
     }
 
 
@@ -236,6 +217,8 @@ public class CalendarView extends LinearLayout
             // today
             Date today = new Date();
 
+
+
             // inflate item if it does not exist yet
             if (view == null)
                 view = inflater.inflate(R.layout.control_calendar_day, parent, false);
@@ -251,7 +234,7 @@ public class CalendarView extends LinearLayout
                             eventDate.getYear() == year)
                     {
                         // mark this day for event
-                        view.setBackgroundResource(R.drawable.reminder);
+                        //view.setBackgroundResource(R.drawable.reminder);
                         break;
                     }
                 }
@@ -259,7 +242,7 @@ public class CalendarView extends LinearLayout
 
             // clear styling
             ((TextView)view).setTypeface(null, Typeface.NORMAL);
-            ((TextView)view).setTextColor(Color.BLACK);
+            ((TextView)view).setTextColor(getResources().getColor(R.color.primary_text_material_dark));
 
             if (month != today.getMonth() || year != today.getYear())
             {
@@ -268,9 +251,9 @@ public class CalendarView extends LinearLayout
             }
             else if (day == today.getDate())
             {
-                // if it is today, set it to blue/bold
-                ((TextView)view).setTypeface(null, Typeface.BOLD);
-                ((TextView)view).setTextColor(getResources().getColor(R.color.today));
+                // if it is today, set it to Italic/Bold
+                ((TextView)view).setTypeface(null, Typeface.BOLD_ITALIC);
+                ((TextView)view).setTextColor(getResources().getColor(R.color.chalk));
             }
 
             // set text

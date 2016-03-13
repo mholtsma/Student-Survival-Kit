@@ -1,7 +1,7 @@
 package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
