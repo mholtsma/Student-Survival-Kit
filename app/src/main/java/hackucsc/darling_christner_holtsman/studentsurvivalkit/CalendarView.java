@@ -71,6 +71,7 @@ public class CalendarView extends LinearLayout
     {
         super(context, attrs, defStyleAttr);
         initControl(context, attrs);
+
     }
 
     /**
