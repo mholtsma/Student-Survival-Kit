@@ -12,10 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -27,6 +32,11 @@ public class MyCalendar extends AppCompatActivity {
 
     ClassDbHelper mDbHelper = new ClassDbHelper(this);
     DateDbHelper mDbHelper1 = new DateDbHelper(this);
+    private GridView grid;
+    HashSet<Date> events = new HashSet<>();
+
+    Date globalDate= new Date();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,10 +44,10 @@ public class MyCalendar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        HashSet<Date> events = new HashSet<>();
         events.add(new Date());
 
         CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        Event(events);
         cv.updateCalendar(events);
 
         // assign event handler
@@ -53,23 +63,55 @@ public class MyCalendar extends AppCompatActivity {
                 EditText hourText = (EditText) findViewById(R.id.hourText);
                 TextView numHours = (TextView) findViewById(R.id.numHours);
                 TextView hoursStudied = (TextView) findViewById(R.id.hoursStudied);
+                TextView totalHours = (TextView) findViewById(R.id.totalHours);
+                TextView totNumHours = (TextView) findViewById(R.id.totNumHours);
+                TextView Class = (TextView) findViewById(R.id.Class);
+                TextView hoursLeft = (TextView) findViewById(R.id.hoursLeft);
+                TextView goalRemainder = (TextView) findViewById(R.id.goalRemainder);
+                TextView classStudy = (TextView) findViewById(R.id.classStudy);
+                EditText classText = (EditText) findViewById(R.id.classText);
                 monthDate.setText(df.format(date));
+                monthDate.setVisibility(View.VISIBLE);
                 if(isStudy()){
                     Log.i("True", "Date is true");
                     longStudy.setVisibility(View.INVISIBLE);
                     hourText.setVisibility(View.INVISIBLE);
-                    String hours = howStudy();
-                    numHours.setText(hours);
+                    classStudy.setVisibility(View.INVISIBLE);
+                    classText.setVisibility(View.INVISIBLE);
+                    String tDate = monthDate.getText().toString();
+                    String classStudyTime = getWeeklyStudy(tDate);
+                    String[] classHours = howStudy(tDate);
+                    LocalDate tmpDate = LocalDate.fromDateFields(date);
+                    String totalStudy = calcTotalStudy(tmpDate);
+                    String goal = hourDif(totalStudy, classStudyTime);
+                    numHours.setText(classHours[1]);
+                    Class.setText(classHours[0]);
+                    goalRemainder.setText(goal);
+                    totNumHours.setText(totalStudy);
                     hoursStudied.setVisibility(View.VISIBLE);
                     numHours.setVisibility(View.VISIBLE);
+                    totNumHours.setVisibility(View.VISIBLE);
+                    totalHours.setVisibility(View.VISIBLE);
+                    Class.setVisibility(View.VISIBLE);
+                    goalRemainder.setVisibility(View.VISIBLE);
+                    hoursLeft.setVisibility(View.VISIBLE);
 
                 } else {
                     Log.i("False", "Date is False");
-                    numHours.setVisibility(View.INVISIBLE);
                     hoursStudied.setVisibility(View.INVISIBLE);
+                    numHours.setVisibility(View.INVISIBLE);
+                    totNumHours.setVisibility(View.INVISIBLE);
+                    totalHours.setVisibility(View.INVISIBLE);
+                    Class.setVisibility(View.INVISIBLE);
+                    goalRemainder.setVisibility(View.INVISIBLE);
+                    hoursLeft.setVisibility(View.INVISIBLE);
+                    Class.setText(" ");
                     numHours.setText(" ");
+                    globalDate = date;
                     longStudy.setVisibility(View.VISIBLE);
                     hourText.setVisibility(View.VISIBLE);
+                    classStudy.setVisibility(View.VISIBLE);
+                    classText.setVisibility(View.VISIBLE);
                 }
                 //Toast.makeText(MyCalendar.this,  df.format(date), Toast.LENGTH_SHORT).show();
             }
@@ -77,6 +119,18 @@ public class MyCalendar extends AppCompatActivity {
     }
 
     public void calSubmit(View v){
+        TextView monthDate = (TextView) findViewById(R.id.monthDate);
+        TextView longStudy = (TextView) findViewById(R.id.longStudy);
+        EditText hourText = (EditText) findViewById(R.id.hourText);
+        TextView numHours = (TextView) findViewById(R.id.numHours);
+        TextView hoursStudied = (TextView) findViewById(R.id.hoursStudied);
+        TextView totalHours = (TextView) findViewById(R.id.totalHours);
+        TextView totNumHours = (TextView) findViewById(R.id.totNumHours);
+        TextView Class = (TextView) findViewById(R.id.Class);
+        TextView hoursLeft = (TextView) findViewById(R.id.hoursLeft);
+        TextView goalRemainder = (TextView) findViewById(R.id.goalRemainder);
+        TextView classStudy = (TextView) findViewById(R.id.classStudy);
+        EditText classText = (EditText) findViewById(R.id.classText);
         SQLiteDatabase db = mDbHelper1.getReadableDatabase();
         SharedPreferences settings = getSharedPreferences(MYPREFS, 0);
         int newId = settings.getInt("date_id", 1);
@@ -85,14 +139,15 @@ public class MyCalendar extends AppCompatActivity {
         editor.putInt("date_id", newId);
         editor.commit();
 
-        TextView tv = (TextView) findViewById(R.id.monthDate);
-        String tDate = tv.getText().toString();
+        String tDate = monthDate.getText().toString();
+        String tClass = classText.getText().toString();
         EditText et = (EditText) findViewById(R.id.hourText);
         String tHours = et.getText().toString();
         ContentValues values = new ContentValues();
 
         values.put(ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID, newId);
         values.put(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE, tDate);
+        values.put(ClassReaderContract.DateEntry.COLUMN_CLASS, tClass);
         values.put(ClassReaderContract.DateEntry.COLUMN_HOURS, tHours);
         values.put(ClassReaderContract.DateEntry.COLUMN_STUDY, true);
 
@@ -101,17 +156,32 @@ public class MyCalendar extends AppCompatActivity {
                 ClassReaderContract.DateEntry.TABLE_NAME,
                 null,
                 values);
-        TextView longStudy = (TextView) findViewById(R.id.longStudy);
-        EditText hourText = (EditText) findViewById(R.id.hourText);
-        TextView numHours = (TextView) findViewById(R.id.numHours);
-        TextView hoursStudied = (TextView) findViewById(R.id.hoursStudied);
         hourText.setText(" ");
+        classText.setText(" ");
         longStudy.setVisibility(View.INVISIBLE);
         hourText.setVisibility(View.INVISIBLE);
-        String hours = howStudy();
-        numHours.setText(hours);
+        classStudy.setVisibility(View.INVISIBLE);
+        classText.setVisibility(View.INVISIBLE);
+        String[] classHours = howStudy(tDate);
+        numHours.setText(classHours[1]);
         hoursStudied.setVisibility(View.VISIBLE);
         numHours.setVisibility(View.VISIBLE);
+        totNumHours.setVisibility(View.VISIBLE);
+        totalHours.setVisibility(View.VISIBLE);
+        Class.setVisibility(View.VISIBLE);
+        goalRemainder.setVisibility(View.VISIBLE);
+        hoursLeft.setVisibility(View.VISIBLE);
+        tDate = monthDate.getText().toString();
+        String classStudyTime = getWeeklyStudy(tDate);
+        LocalDate tmpDate = LocalDate.fromDateFields(globalDate);
+        String totalStudy = calcTotalStudy(tmpDate);
+        String goal = hourDif(totalStudy, classStudyTime);
+        Class.setText(classHours[0]);
+        goalRemainder.setText(goal);
+        totNumHours.setText(totalStudy);
+        CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        Event(events);
+        cv.updateCalendar(events);
 
     }
 
@@ -139,8 +209,6 @@ public class MyCalendar extends AppCompatActivity {
         while(c.moveToNext()){
             int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
             String tmp = c.getString(itemId);
-            Log.i("tmp", tmp);
-            Log.i("tDate", tDate);
             if(tmp.equals(tDate)){
                 c.close();
                 return true;
@@ -152,14 +220,162 @@ public class MyCalendar extends AppCompatActivity {
     }
 
     //function to find out long someone has studied on a specific day
-    public String howStudy(){
+    public String[] howStudy(String tDate){
         SQLiteDatabase db = mDbHelper1.getReadableDatabase();
         String[] projection = {
                 ClassReaderContract.DateEntry._ID,
                 ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
                 ClassReaderContract.DateEntry.COLUMN_MONTH_DATE,
                 ClassReaderContract.DateEntry.COLUMN_STUDY,
+                ClassReaderContract.DateEntry.COLUMN_CLASS,
                 ClassReaderContract.DateEntry.COLUMN_HOURS
+        };
+        Cursor c = db.query(
+                ClassReaderContract.DateEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                            // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        c.moveToFirst();
+        String[] tmp1 = new String[2];
+        while(c.moveToNext()){
+            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
+            String tmp = c.getString(itemId);
+            if(tmp.equals(tDate)) {
+                itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_HOURS);
+                tmp1[1] = c.getString(itemId);
+                itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_CLASS);
+                tmp1[0] = c.getString(itemId);
+                c.close();
+                return tmp1;
+            }
+
+        }
+        c.close();
+        tmp1[0] = " ";
+        tmp1[1] = "0";
+        return tmp1;
+    }
+
+    public String calcTotalStudy(LocalDate local){
+        DateFormat df = SimpleDateFormat.getDateInstance();
+        LocalDate day = local.withDayOfWeek(1);
+        int week = local.getWeekOfWeekyear();
+        Date tDate;
+        String tmp1 = " ";
+        String[] tmp2;
+        int total = 0;
+        while(day.getWeekOfWeekyear() == week){
+            tDate = day.toDate();
+            tmp1 = df.format(tDate);
+
+            tmp2 = howStudy(tmp1);
+
+            tmp2[1] = tmp2[1].trim();
+            total += Integer.parseInt(tmp2[1]);
+
+            day = day.plusDays(1);
+        }
+
+        return Integer.toString(total);
+    }
+
+    public String getWeeklyStudy(String tDate){
+        SQLiteDatabase db = mDbHelper1.getReadableDatabase();
+        String[] projection = {
+                ClassReaderContract.DateEntry._ID,
+                ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.DateEntry.COLUMN_MONTH_DATE,
+                ClassReaderContract.DateEntry.COLUMN_STUDY,
+                ClassReaderContract.DateEntry.COLUMN_CLASS,
+                ClassReaderContract.DateEntry.COLUMN_HOURS
+        };
+        Cursor c = db.query(
+                ClassReaderContract.DateEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                            // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        String tClass = " ";
+        c.moveToFirst();
+        while(c.moveToNext()) {
+            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
+            String tmp = c.getString(itemId);
+            if(tmp.equals(tDate)){
+                itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_CLASS);
+                tClass = c.getString(itemId);
+                tClass = tClass.trim();
+                break;
+            }
+        }
+
+        SQLiteDatabase db1 = mDbHelper.getReadableDatabase();
+        String[] projection1 = {
+                ClassReaderContract.ClassEntry._ID,
+                ClassReaderContract.ClassEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.ClassEntry.COLUMN_CLASS,
+                ClassReaderContract.ClassEntry.COLUMN_UNITS,
+                ClassReaderContract.ClassEntry.COLUMN_STUDY_HOURS,
+        };
+
+        Cursor c1 = db1.query(
+                ClassReaderContract.ClassEntry.TABLE_NAME,  // The table to query
+                projection1,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort orderadasd
+        );
+        c1.moveToFirst();
+        String classHours;
+        while(c1.moveToNext()) {
+            int itemId1 = c1.getColumnIndexOrThrow(ClassReaderContract.ClassEntry.COLUMN_CLASS);
+            String className = c1.getString(itemId1);
+            Log.i("className", className);
+            Log.i("tClass", tClass);
+            if(className.equals(tClass)){
+                itemId1 = c1.getColumnIndexOrThrow(ClassReaderContract.ClassEntry.COLUMN_STUDY_HOURS);
+                classHours = c1.getString(itemId1);
+                return classHours;
+            }
+        }
+        return "0";
+    }
+
+    public String hourDif(String total, String goal){
+        int x = Integer.parseInt(total);
+        int y = Integer.parseInt(goal);
+        int z = y-x;
+        int zero = 0;
+        Log.i("Z", Integer.toString(z));
+        Log.i("X", Integer.toString(x));
+        Log.i("Y", Integer.toString(y));
+        if(z <= zero){
+            return "You Hit Your Goal";
+        } else{
+            return Integer.toString(z);
+        }
+    }
+
+    public void Event(HashSet<Date> events){
+        CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+
+        //HashSet<Date> eventDays = new HashSet<>();
+        grid = (GridView) findViewById(R.id.calendar_grid);
+        SQLiteDatabase db = mDbHelper1.getReadableDatabase();
+        String[] projection = {
+                ClassReaderContract.DateEntry._ID,
+                ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.DateEntry.COLUMN_MONTH_DATE,        //dates
+                ClassReaderContract.DateEntry.COLUMN_STUDY,             //booleans
         };
         TextView tv = (TextView) findViewById(R.id.monthDate);
         String tDate = tv.getText().toString();
@@ -174,21 +390,34 @@ public class MyCalendar extends AppCompatActivity {
         );
         c.moveToFirst();
         while(c.moveToNext()){
-            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
-            String tmp = c.getString(itemId);
-            Log.i("tmp", tmp);
-            Log.i("tDate", tDate);
-            if(tmp.equals(tDate)) {
-                itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_HOURS);
-                tmp = c.getString(itemId);
-                c.close();
-                return tmp;
+            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_STUDY);
+            int studydate = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
+            String studyday = c.getString(studydate);
+            DateTime tEvent = new DateTime();
+            Date event = new Date();
+            //if(!studyday.equals("")) {
+            try {
+                event = df.parse(studyday);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            //event = tEvent.toDate();
+            int tmp = c.getInt(itemId);
+            String temp = Integer.toString(tmp);
+            //Log.i("tmp", tmp);
+            Log.i("tDate", tDate);
+            Log.i("temp", temp);
+            if (tmp == 1) {
+                //events.add(new Date());
+                events.add(event);
+                //c.close();
+            }
+            // }
 
         }
         c.close();
-        return " ";
     }
+
 
  /*   @Override
     public boolean onCreateOptionsMenu(Menu menu)
