@@ -33,6 +33,8 @@ public class ActSplash extends AppCompatActivity {
         Go_button.setVisibility(View.VISIBLE);
     }
 
+
+
     public void onClick(View v){
         EditText Your_Name = (EditText) findViewById(R.id.editText);
         SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);

@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="5dp"
-    tools:context="hackucsc.darling_christner_holtsman.studentsurvivalkit.Home">
+    tools:context="hackucsc.darling_christner_holtsman.studentsurvivalkit.Home"
+    android:background="#3B653D">
 
     <ScrollView
       android:layout_width="match_parent"
@@ -18,10 +19,12 @@
 
       <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+          android:background="#3B653D">
 
           <ImageButton
               android:layout_width="220dp"
+              android:layout_marginTop="120dp"
               android:layout_height="100dp"
               android:background="@drawable/calc_butt"
               android:id="@+id/registerButton"
@@ -46,8 +49,31 @@
                 android:onClick="Remind"
                 android:layout_centerHorizontal="true"/>
 
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Welcome,"
+              android:id="@+id/textView4"
+              android:textSize="35dp"
+              android:layout_marginTop="43dp"
+              android:background="#3B653D"
+              android:textColor="#FFFFFF"
+              android:layout_alignParentTop="true"
+              android:layout_centerHorizontal="true" />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="35dp"
+              android:background="#3B653D"
+              android:textColor="#FFFFFF"
+              android:id="@+id/textView6"
+              android:layout_below="@+id/textView4"
+              android:layout_alignLeft="@+id/textView4"
+              android:layout_alignStart="@+id/textView4" />
 
 
-        </RelativeLayout>
+
+      </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
