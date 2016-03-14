@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="hackucsc.darling_christner_holtsman.studentsurvivalkit"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="hackucsc.darling_christner_holtsman.studentsurvivalkit">
 
     <application
         android:allowBackup="true"
@@ -8,27 +8,26 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/School">
-
-        <activity android:name=".Home">
+        <activity android:name=".ActSplash">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Calendar">
-        </activity>
-        <activity android:name=".GradeTracker">
-        </activity>
-        <activity android:name=".GradeProject">
-        </activity>
-        <activity android:name=".Registration_activity">
-        </activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".MyCalendar"></activity>
+        <activity android:name=".GradeTracker"></activity>
+        <activity android:name=".GradeProject"></activity>
+        <activity android:name=".Registration_activity"></activity>
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".Home"></activity>
     </application>
 
 </manifest>

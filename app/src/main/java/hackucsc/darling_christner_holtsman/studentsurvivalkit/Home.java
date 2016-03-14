@@ -34,7 +34,8 @@ public class Home extends AppCompatActivity {
     }
 
 
-    
+
+
     public void calPress(View view){
         Intent intent= new Intent (this, Calendar.class);
         startActivity(intent);
