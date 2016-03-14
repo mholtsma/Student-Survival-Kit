@@ -3,10 +3,11 @@ package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 //Should include links the the different features
 //
 //
-// This comment is to test Ian's commit 
+// This comment is to test Ian's commit
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -27,7 +29,12 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
     }
+    @Override
+    public void onBackPressed() {
+    }
 
+
+    
     public void calPress(View view){
         Intent intent= new Intent (this, Calendar.class);
         startActivity(intent);
