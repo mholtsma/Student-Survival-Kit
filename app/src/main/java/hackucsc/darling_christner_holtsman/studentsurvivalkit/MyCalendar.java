@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -30,6 +32,10 @@ public class MyCalendar extends AppCompatActivity {
 
     ClassDbHelper mDbHelper = new ClassDbHelper(this);
     DateDbHelper mDbHelper1 = new DateDbHelper(this);
+    private GridView grid;
+    HashSet<Date> events = new HashSet<>();
+
+    Date globalDate= new Date();
 
 
     @Override
@@ -38,10 +44,10 @@ public class MyCalendar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        HashSet<Date> events = new HashSet<>();
         events.add(new Date());
 
         CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        Event(events);
         cv.updateCalendar(events);
 
         // assign event handler
@@ -65,6 +71,7 @@ public class MyCalendar extends AppCompatActivity {
                 TextView classStudy = (TextView) findViewById(R.id.classStudy);
                 EditText classText = (EditText) findViewById(R.id.classText);
                 monthDate.setText(df.format(date));
+                monthDate.setVisibility(View.VISIBLE);
                 if(isStudy()){
                     Log.i("True", "Date is true");
                     longStudy.setVisibility(View.INVISIBLE);
@@ -100,6 +107,7 @@ public class MyCalendar extends AppCompatActivity {
                     hoursLeft.setVisibility(View.INVISIBLE);
                     Class.setText(" ");
                     numHours.setText(" ");
+                    globalDate = date;
                     longStudy.setVisibility(View.VISIBLE);
                     hourText.setVisibility(View.VISIBLE);
                     classStudy.setVisibility(View.VISIBLE);
@@ -163,6 +171,17 @@ public class MyCalendar extends AppCompatActivity {
         Class.setVisibility(View.VISIBLE);
         goalRemainder.setVisibility(View.VISIBLE);
         hoursLeft.setVisibility(View.VISIBLE);
+        tDate = monthDate.getText().toString();
+        String classStudyTime = getWeeklyStudy(tDate);
+        LocalDate tmpDate = LocalDate.fromDateFields(globalDate);
+        String totalStudy = calcTotalStudy(tmpDate);
+        String goal = hourDif(totalStudy, classStudyTime);
+        Class.setText(classHours[0]);
+        goalRemainder.setText(goal);
+        totNumHours.setText(totalStudy);
+        CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        Event(events);
+        cv.updateCalendar(events);
 
     }
 
@@ -291,6 +310,7 @@ public class MyCalendar extends AppCompatActivity {
             if(tmp.equals(tDate)){
                 itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_CLASS);
                 tClass = c.getString(itemId);
+                tClass = tClass.trim();
                 break;
             }
         }
@@ -343,6 +363,61 @@ public class MyCalendar extends AppCompatActivity {
             return Integer.toString(z);
         }
     }
+
+    public void Event(HashSet<Date> events){
+        CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+
+        //HashSet<Date> eventDays = new HashSet<>();
+        grid = (GridView) findViewById(R.id.calendar_grid);
+        SQLiteDatabase db = mDbHelper1.getReadableDatabase();
+        String[] projection = {
+                ClassReaderContract.DateEntry._ID,
+                ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.DateEntry.COLUMN_MONTH_DATE,        //dates
+                ClassReaderContract.DateEntry.COLUMN_STUDY,             //booleans
+        };
+        TextView tv = (TextView) findViewById(R.id.monthDate);
+        String tDate = tv.getText().toString();
+        Cursor c = db.query(
+                ClassReaderContract.DateEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                            // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        c.moveToFirst();
+        while(c.moveToNext()){
+            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_STUDY);
+            int studydate = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
+            String studyday = c.getString(studydate);
+            DateTime tEvent = new DateTime();
+            Date event = new Date();
+            //if(!studyday.equals("")) {
+            try {
+                event = df.parse(studyday);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //event = tEvent.toDate();
+            int tmp = c.getInt(itemId);
+            String temp = Integer.toString(tmp);
+            //Log.i("tmp", tmp);
+            Log.i("tDate", tDate);
+            Log.i("temp", temp);
+            if (tmp == 1) {
+                //events.add(new Date());
+                events.add(event);
+                //c.close();
+            }
+            // }
+
+        }
+        c.close();
+    }
+
 
  /*   @Override
     public boolean onCreateOptionsMenu(Menu menu)

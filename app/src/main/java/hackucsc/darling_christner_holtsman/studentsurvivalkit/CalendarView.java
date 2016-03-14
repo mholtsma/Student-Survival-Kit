@@ -10,6 +10,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -225,16 +226,20 @@ public class CalendarView extends LinearLayout
 
             // if this day has an event, specify event image
             view.setBackgroundResource(0);
+            //Log.i("An event", "not really");
             if (eventDays != null)
             {
+                //Log.i("An event", "not null atleast");
                 for (Date eventDate : eventDays)
-                {
+                {//Log.i("An event", "almost");
                     if (eventDate.getDate() == day &&
                             eventDate.getMonth() == month &&
                             eventDate.getYear() == year)
                     {
                         // mark this day for event
                         //view.setBackgroundResource(R.drawable.reminder);
+                        view.setBackgroundColor(getResources().getColor(R.color.spring));
+                        //Log.i("An event", "event");
                         break;
                     }
                 }
