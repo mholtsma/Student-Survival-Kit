@@ -39,7 +39,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
+        android:text="Submit"
         android:id="@+id/calSubmit"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -65,16 +65,49 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="Hours Studied"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:inputType="number" />
 
-    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Hours Studied: "
+        android:text="What Class Did You Study For?"
+        android:id="@+id/classStudy"
+        android:layout_below="@+id/hourText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/classText"
+        android:layout_below="@+id/classStudy"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Class"
+        android:visibility="invisible"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/Class"
+        android:layout_below="@+id/monthDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"
+        android:hint="@string/Class"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Hours Studied Today: "
         android:id="@+id/hoursStudied"
-        android:layout_above="@+id/hourText"
+        android:layout_below="@+id/Class"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:visibility="invisible"/>
@@ -84,10 +117,54 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/numHours"
-        android:layout_alignTop="@+id/hourText"
+        android:layout_below="@+id/hoursStudied"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="Hours"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Total Hours Studied This Week:"
+        android:id="@+id/totalHours"
+        android:layout_below="@+id/numHours"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/totNumHours"
+        android:layout_below="@+id/totalHours"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Total Hours"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Hours Left to Goal: "
+        android:id="@+id/hoursLeft"
+        android:layout_below="@+id/totNumHours"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/goalRemainder"
+        android:layout_below="@+id/totNumHours"
+        android:layout_toRightOf="@+id/hoursLeft"
+        android:layout_toEndOf="@+id/hoursLeft"
+        android:hint="Goal Remainder"
         android:visibility="invisible" />
 
 
