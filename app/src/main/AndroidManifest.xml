@@ -15,6 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".MyCalendar"></activity>
         <activity android:name=".GradeTracker"></activity>
         <activity android:name=".GradeProject"></activity>
@@ -23,6 +24,18 @@
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
+=======
+        <activity android:name=".MyCalendar">
+        </activity>
+        <activity android:name=".GradeTracker">
+        </activity>
+        <activity android:name=".GradeProject">
+        </activity>
+        <activity android:name=".Registration_activity">
+        </activity>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+>>>>>>> 402bbb2c938b6b85794315261a9869b3ed543034
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

@@ -1,95 +1,283 @@
 package hackucsc.darling_christner_holtsman.studentsurvivalkit;
 
+import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
-import java.util.Calendar;
-import android.widget.CalendarView;
-import android.widget.TextView;
-import java.util.Date;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+
+
 
 public class MyCalendar extends AppCompatActivity {
-
-
-    int year;
-    int month;
-    int day;
-    boolean isEven;
     static final public String MYPREFS = "myprefs";
-    long startDate, endDate;
+
+    ClassDbHelper mDbHelper = new ClassDbHelper(this);
+    DateDbHelper mDbHelper1 = new DateDbHelper(this);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        setup();
+        HashSet<Date> events = new HashSet<>();
+        events.add(new Date());
 
-    }
+        CalendarView cv = ((CalendarView)findViewById(R.id.calendar_view));
+        cv.updateCalendar(events);
 
-    Date date;
-
-    public Date date_Get(int Day, int Month, int Year){
-
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(Year, Month, Day);
-        date = cal.getTime();
-        return date;
-    }
-
-    public void imp(){
-        SharedPreferences settings = getSharedPreferences(MYPREFS, 0);
-        int startDate = settings.getInt("startDay",1);
-        int startYear = settings.getInt("startYear",1);
-        int startMonth = settings.getInt("startMonth",1);
-        Date startDay= date_Get(startDate, startMonth, startYear);
-
-        int endDate = settings.getInt("endDay", 1);
-        int endYear = settings.getInt("endYear", 1);
-        int endMonth = settings.getInt("endMonth",1);
-        Date endDay= date_Get(startDate,startMonth,startYear);
-    }
-
-
-    public void setup() {
-        final CalendarView cv = (CalendarView) findViewById(R.id.calendarView);
-        final long currentDate = cv.getDate();
-        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        // assign event handler
+        cv.setEventHandler(new CalendarView.EventHandler()
+        {
             @Override
-            public void onSelectedDayChange(CalendarView view, int grabyear, int grabmonth, int dayOfMonth) {
-                if(cv.getDate() < currentDate) {
-                    //if its in the past
-                    if (dayOfMonth % 2 == 0) {
-                        cv.setSelectedWeekBackgroundColor(getResources().getColor(R.color.bpBlue));
-                    } else {
-                        cv.setSelectedWeekBackgroundColor(getResources().getColor(R.color.bpDarker_red));
-                    }
-                }else if (cv.getDate() >= currentDate){
-                    cv.setSelectedWeekBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                }
-                String day = Cal_Proccess.getDay(cv);
-                TextView tx = (TextView) findViewById(R.id.test);
-                TextView tx2 = (TextView) findViewById(R.id.test2);
-                tx.setText(day);
-                if(Cal_Proccess.classDay(cv, "MWF")){
-                    tx2.setText("You have class");
-                }else{
-                    tx2.setText("No class today!");
-                }
+            public void onDayLongPress(Date date)
+            {
+                // show returned day
+                DateFormat df = SimpleDateFormat.getDateInstance();
+                TextView monthDate = (TextView) findViewById(R.id.monthDate);
+                TextView longStudy = (TextView) findViewById(R.id.longStudy);
+                EditText hourText = (EditText) findViewById(R.id.hourText);
+                TextView numHours = (TextView) findViewById(R.id.numHours);
+                TextView hoursStudied = (TextView) findViewById(R.id.hoursStudied);
+                monthDate.setText(df.format(date));
+                if(isStudy()){
+                    Log.i("True", "Date is true");
+                    longStudy.setVisibility(View.INVISIBLE);
+                    hourText.setVisibility(View.INVISIBLE);
+                    String hours = howStudy();
+                    numHours.setText(hours);
+                    hoursStudied.setVisibility(View.VISIBLE);
+                    numHours.setVisibility(View.VISIBLE);
 
+                } else {
+                    Log.i("False", "Date is False");
+                    numHours.setVisibility(View.INVISIBLE);
+                    hoursStudied.setVisibility(View.INVISIBLE);
+                    numHours.setText(" ");
+                    longStudy.setVisibility(View.VISIBLE);
+                    hourText.setVisibility(View.VISIBLE);
+                }
+                //Toast.makeText(MyCalendar.this,  df.format(date), Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    public void calSubmit(View v){
+        SQLiteDatabase db = mDbHelper1.getReadableDatabase();
+        SharedPreferences settings = getSharedPreferences(MYPREFS, 0);
+        int newId = settings.getInt("date_id", 1);
+        newId+=1;
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("date_id", newId);
+        editor.commit();
+
+        TextView tv = (TextView) findViewById(R.id.monthDate);
+        String tDate = tv.getText().toString();
+        EditText et = (EditText) findViewById(R.id.hourText);
+        String tHours = et.getText().toString();
+        ContentValues values = new ContentValues();
+
+        values.put(ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID, newId);
+        values.put(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE, tDate);
+        values.put(ClassReaderContract.DateEntry.COLUMN_HOURS, tHours);
+        values.put(ClassReaderContract.DateEntry.COLUMN_STUDY, true);
+
+        long newRowId;
+        newRowId = db.insert(
+                ClassReaderContract.DateEntry.TABLE_NAME,
+                null,
+                values);
+        TextView longStudy = (TextView) findViewById(R.id.longStudy);
+        EditText hourText = (EditText) findViewById(R.id.hourText);
+        TextView numHours = (TextView) findViewById(R.id.numHours);
+        TextView hoursStudied = (TextView) findViewById(R.id.hoursStudied);
+        hourText.setText(" ");
+        longStudy.setVisibility(View.INVISIBLE);
+        hourText.setVisibility(View.INVISIBLE);
+        String hours = howStudy();
+        numHours.setText(hours);
+        hoursStudied.setVisibility(View.VISIBLE);
+        numHours.setVisibility(View.VISIBLE);
+
+    }
+
+    //function to see if someone studied on a specific day
+    public Boolean isStudy() {
+        SQLiteDatabase db = mDbHelper1.getReadableDatabase();
+        String[] projection = {
+                ClassReaderContract.DateEntry._ID,
+                ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.DateEntry.COLUMN_MONTH_DATE,
+                ClassReaderContract.DateEntry.COLUMN_STUDY,
+        };
+        TextView tv = (TextView) findViewById(R.id.monthDate);
+        String tDate = tv.getText().toString();
+        Cursor c = db.query(
+                ClassReaderContract.DateEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                            // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        c.moveToFirst();
+        while(c.moveToNext()){
+            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
+            String tmp = c.getString(itemId);
+            Log.i("tmp", tmp);
+            Log.i("tDate", tDate);
+            if(tmp.equals(tDate)){
+                c.close();
+                return true;
+            }
+
+        }
+        c.close();
+        return false;
+    }
+
+    //function to find out long someone has studied on a specific day
+    public String howStudy(){
+        SQLiteDatabase db = mDbHelper1.getReadableDatabase();
+        String[] projection = {
+                ClassReaderContract.DateEntry._ID,
+                ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.DateEntry.COLUMN_MONTH_DATE,
+                ClassReaderContract.DateEntry.COLUMN_STUDY,
+                ClassReaderContract.DateEntry.COLUMN_HOURS
+        };
+        TextView tv = (TextView) findViewById(R.id.monthDate);
+        String tDate = tv.getText().toString();
+        Cursor c = db.query(
+                ClassReaderContract.DateEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                            // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        c.moveToFirst();
+        while(c.moveToNext()){
+            int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_MONTH_DATE);
+            String tmp = c.getString(itemId);
+            Log.i("tmp", tmp);
+            Log.i("tDate", tDate);
+            if(tmp.equals(tDate)) {
+                itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_HOURS);
+                tmp = c.getString(itemId);
+                c.close();
+                return tmp;
+            }
+
+        }
+        c.close();
+        return " ";
+    }
+
+ /*   @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings)
+        {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    } */
+}
+
+
+    /*@Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings)
+        {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
 
+    String[] projection = {
+                ClassReaderContract.DateEntry._ID,
+                ClassReaderContract.DateEntry.COLUMN_NAME_ENTRY_ID,
+                ClassReaderContract.DateEntry.COLUMN_CLASS,
+                ClassReaderContract.DateEntry.COLUMN_DATE,
+                ClassReaderContract.DateEntry.COLUMN_HOMEWORK,
+                ClassReaderContract.DateEntry.COLUMN_STUDY,
+        };
+        String selection = "COLUMN_DATE=?";
+        String orderBy = "COLUMN_DATE";
+        String[] whereArgs = new String[] {
+                "value1"
+        };
+
+        TextView tv = (TextView) findViewById(R.id.monthDate);
+        String tDate = tv.toString();
+        whereArgs[0] = tDate;
+        Cursor c = db.query(
+                ClassReaderContract.ClassEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                selection,                            // The columns for the WHERE clause
+                whereArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                orderBy                                 // The sort order
+        );
+        c.moveToFirst();
+        int itemId = c.getColumnIndexOrThrow(ClassReaderContract.DateEntry.COLUMN_CLASS);
+        String className = c.getString(itemId);
 
 
-}
+
+
+    */
+
+
+

@@ -3,73 +3,92 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="20dp"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="1"
+    android:id="@+id/calLinear"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="20dp"
-    tools:context="hackucsc.darling_christner_holtsman.studentsurvivalkit.Calendar">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
 
-    <CalendarView
-        style="@android:style/Widget.CalendarView"
-        android:selectedDateVerticalBar="@color/chalk"
-        android:selectedWeekBackgroundColor="@color/colorPrimaryDark"
-        android:showWeekNumber="false"
+
+    <hackucsc.darling_christner_holtsman.studentsurvivalkit.CalendarView
+        xmlns:calendarNS="http://schemas.android.com/apk/res/hackucsc.darling_christner_holtsman.studentsurvivalkit"
+        android:id="@+id/calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/calendarView"
-        />
+        android:layout_height="wrap_content"
+        calendarNS:dateFormat="MMMM yyyy"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="0dp"
-        android:layout_below="@+id/calendarView"
+</LinearLayout>
 
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/monthDate"
+        android:layout_below="@+id/calLinear"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Date" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="50dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/test"
-        />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="50dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_below="@+id/test"
-                android:text="Medium Text"
-                android:id="@+id/test2"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="50dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:layout_below="@+id/test2"
-                android:id="@+id/test3"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:paddingTop="50dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/test3"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/test4"
-                />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/calSubmit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="calSubmit"/>
 
-        </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="How Long Did You Study Today?"
+        android:id="@+id/longStudy"
+        android:layout_below="@+id/monthDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
 
-    </ScrollView>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hourText"
+        android:layout_below="@+id/longStudy"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Hours Studied"
+        android:visibility="invisible" />
+
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Hours Studied: "
+        android:id="@+id/hoursStudied"
+        android:layout_above="@+id/hourText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/numHours"
+        android:layout_alignTop="@+id/hourText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Hours"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

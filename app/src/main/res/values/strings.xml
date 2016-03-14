@@ -5,6 +5,7 @@
     <string name="units">Units</string>
     <string name="Class">Class</string>
     <string name="pick_date">Pick Date</string>
+    <string name="pick_days">When Does Your Class Meet?</string>
     <string name="date_picker_result_value">%1$s / %2$s / %3$s</string>
     <string-array name="classDays">
         <item>Monday, Wednesday</item>
